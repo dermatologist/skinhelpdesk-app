@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:skinhelpdesk_app/ui/screens/take_picture_screen.dart';
 import 'package:skinhelpdesk_app/ui/screens/welcome_screen.dart';
 
 void main() {
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
       ),
       routes: <String, WidgetBuilder>{
         '/welcome': (BuildContext context) => new WelcomeScreen(),
-        // '/camera': (BuildContext context) => new TakePictureScreen(),
+        '/camera': (BuildContext context) => new TakePictureScreen(),
         },
       home: new WelcomeScreen(),
     );
