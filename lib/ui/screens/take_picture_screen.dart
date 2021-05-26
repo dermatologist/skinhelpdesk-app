@@ -25,14 +25,14 @@ class TakePictureScreen extends StatefulWidget {
 
 class TakePictureScreenState extends State<TakePictureScreen> {
   late CameraController _controller;
-  late Future<void> _initializeControllerFuture;
-  late bool _initialized;
+  Future<void>? _initializeControllerFuture;
+  bool? _initialized;
 
   late Future<Message> message;
   Submission submission =
       new Submission(Payload: '', Service: '', ValueCode: 35);
 
-  late List<CameraDescription> cameras;
+  List<CameraDescription>? cameras;
 
   @override
   void initState() {
@@ -78,16 +78,16 @@ class TakePictureScreenState extends State<TakePictureScreen> {
     this.cameras = await availableCameras();
 
     // Get a specific camera from the list of available cameras.
-    final firstCamera = this.cameras.first;
+    final firstCamera = this.cameras?.first;
 
     this._controller = CameraController(
       // Get a specific camera from the list of available cameras.
-      firstCamera,
+      firstCamera!,
       // Define the resolution to use.
       ResolutionPreset.medium,
       enableAudio: false,
     );
-    this._initializeControllerFuture = this._controller.initialize();
+    this._initializeControllerFuture = this._controller!.initialize();
     return this._initializeControllerFuture;
   }
 
@@ -105,8 +105,8 @@ class TakePictureScreenState extends State<TakePictureScreen> {
   }
 
   void onNewCameraSelected(CameraDescription cameraDescription) async {
-    if (this._controller != null && this._controller.value.isRecordingVideo) {
-      await this._controller.dispose();
+    if (this._controller != null && this._controller!.value.isRecordingVideo) {
+      await this._controller!.dispose();
     }
     this._controller = CameraController(
       cameraDescription,
@@ -115,16 +115,16 @@ class TakePictureScreenState extends State<TakePictureScreen> {
     );
 
     // If the this._controller is updated then update the UI.
-    this._controller.addListener(() {
+    this._controller!.addListener(() {
       if (mounted) setState(() {});
-      if (this._controller.value.hasError) {
+      if (this._controller!.value.hasError) {
         //showInSnackBar('Camera error ${this._controller.value.errorDescription}');
       }
     });
 
     try {
       // await this._controller.initialize();
-      this._initializeControllerFuture = this._controller.initialize();
+      this._initializeControllerFuture = this._controller!.initialize();
     } on CameraException catch (e) {
       //_showCameraException(e);
     }
@@ -138,16 +138,16 @@ class TakePictureScreenState extends State<TakePictureScreen> {
   Widget _cameraTogglesRowWidget() {
     final List<Widget> toggles = <Widget>[];
 
-    if (this.cameras.isEmpty) {
+    if (this.cameras!.isEmpty) {
       return const Text('No camera found');
     } else {
-      for (CameraDescription cameraDescription in cameras) {
+      for (CameraDescription cameraDescription in cameras!) {
         toggles.add(
           SizedBox(
             width: 90.0,
             child: RadioListTile<CameraDescription>(
               title: Icon(getCameraLensIcon(cameraDescription.lensDirection)),
-              groupValue: this._controller.description,
+              groupValue: this._controller!.description,
               value: cameraDescription,
               onChanged: null,
             ),
@@ -200,7 +200,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
         future: _initializeControllerFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done &&
-              _initialized) {
+              _initialized!) {
             // If the Future is complete, display the preview.
             //return CameraPreview(_controller);
             return _cameraTogglesRowWidget();
