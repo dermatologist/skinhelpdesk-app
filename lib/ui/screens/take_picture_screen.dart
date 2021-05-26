@@ -9,6 +9,7 @@ import 'package:skinhelpdesk_app/models/submission.dart';
 import 'package:skinhelpdesk_app/config/skinhelpdesk_config.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:http/http.dart' as http;
+import 'package:skinhelpdesk_app/ui/widgets/display_api_data.dart';
 
 // A screen that allows users to take a picture using a given camera.
 class TakePictureScreen extends StatefulWidget {
@@ -267,10 +268,10 @@ class DisplayPictureScreen extends StatelessWidget {
       // The image is stored as a file on the device. Use the `Image.file`
       // constructor with the given path to display the image.
 
-      // body: DisplayApiData(
-      //   imagePath: imagePath,
-      //   message: message,
-      // ),
+      body: DisplayApiData(
+        imagePath: imagePath,
+        message: message,
+      ),
     );
   }
 }

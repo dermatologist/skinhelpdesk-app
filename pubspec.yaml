@@ -26,6 +26,7 @@ dependencies:
   camera:
   image_cropper:
   http:
+  percent_indicator: "^3.0.1"
 
 
   # The following adds the Cupertino Icons font to your application.
