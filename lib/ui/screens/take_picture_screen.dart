@@ -6,19 +6,12 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:skinhelpdesk_app/models/message.dart';
 import 'package:skinhelpdesk_app/models/submission.dart';
-import 'package:skinhelpdesk_app/config/skinhelpdesk_config.dart';
 import 'package:image_cropper/image_cropper.dart';
-import 'package:http/http.dart' as http;
+import 'package:skinhelpdesk_app/service/skinhelpdesk-rapid-api.dart';
 import 'package:skinhelpdesk_app/ui/widgets/display_api_data.dart';
 
 // A screen that allows users to take a picture using a given camera.
 class TakePictureScreen extends StatefulWidget {
-//  final CameraDescription camera;
-
-//  const TakePictureScreen({
-//    Key key,
-//    @required this.camera,
-//  }) : super(key: key);
 
   @override
   TakePictureScreenState createState() => TakePictureScreenState();
@@ -51,21 +44,14 @@ class TakePictureScreenState extends State<TakePictureScreen> {
   }
 
   Future<Message> createPost() async {
-    String url = skinhelpdeskConfig['shdtone'] ?? "";
-    final response = await http.post(Uri.parse(url),
-        headers: {
-          HttpHeaders.contentTypeHeader: 'application/json',
-        },
-        body: jsonEncode(submission));
-    return Message.fromJson(json.decode(response.body));
+    APIService apiService = APIService();
+    final response =  await apiService.post(endpoint:'/shdtone', query: jsonEncode(submission));
+    return Message.fromJson(response);
   }
 
   Future<File> _cropImage(File imageFile) async {
     File? croppedFile = await ImageCropper.cropImage(
       sourcePath: imageFile.path,
-//      toolbarTitle: 'Cropper',
-//      toolbarColor: Colors.blue,
-//      toolbarWidgetColor: Colors.white,
     );
     if (croppedFile != null) {
       return croppedFile;
@@ -88,7 +74,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
       ResolutionPreset.medium,
       enableAudio: false,
     );
-    this._initializeControllerFuture = this._controller!.initialize();
+    this._initializeControllerFuture = this._controller.initialize();
     return this._initializeControllerFuture;
   }
 
@@ -102,12 +88,11 @@ class TakePictureScreenState extends State<TakePictureScreen> {
       case CameraLensDirection.external:
         return Icons.camera;
     }
-    throw ArgumentError('Unknown lens direction');
   }
 
   void onNewCameraSelected(CameraDescription cameraDescription) async {
-    if (this._controller != null && this._controller!.value.isRecordingVideo) {
-      await this._controller!.dispose();
+    if (this._controller.value.isRecordingVideo) {
+      await this._controller.dispose();
     }
     this._controller = CameraController(
       cameraDescription,
@@ -116,16 +101,16 @@ class TakePictureScreenState extends State<TakePictureScreen> {
     );
 
     // If the this._controller is updated then update the UI.
-    this._controller!.addListener(() {
+    this._controller.addListener(() {
       if (mounted) setState(() {});
-      if (this._controller!.value.hasError) {
+      if (this._controller.value.hasError) {
         //showInSnackBar('Camera error ${this._controller.value.errorDescription}');
       }
     });
 
     try {
       // await this._controller.initialize();
-      this._initializeControllerFuture = this._controller!.initialize();
+      this._initializeControllerFuture = this._controller.initialize();
     } on CameraException catch (e) {
       //_showCameraException(e);
     }
@@ -148,7 +133,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
             width: 90.0,
             child: RadioListTile<CameraDescription>(
               title: Icon(getCameraLensIcon(cameraDescription.lensDirection)),
-              groupValue: this._controller!.description,
+              groupValue: this._controller.description,
               value: cameraDescription,
               onChanged: null,
             ),
@@ -156,12 +141,6 @@ class TakePictureScreenState extends State<TakePictureScreen> {
         );
       }
     }
-    //return Row(children: toggles);
-    // return CameraPreview(this._controller);
-//    return Column(children: <Widget>[
-//      Row(children: toggles),
-//      CameraPreview(this._controller),
-//    ],);
 
     return Column(
       children: <Widget>[
