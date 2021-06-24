@@ -5,15 +5,14 @@ import 'package:skinhelpdesk_app/config/skinhelpdesk_config.dart';
 
 class APIService {
   // API key
-  String _api_key = skinhelpdeskConfig['apikey'] ?? "";
+  String _apiKey = skinhelpdeskConfig['apikey'] ?? "";
   // Base API url
-  String _baseUrl = skinhelpdeskConfig['shdurl'] ?? "";
+  String _baseUrl = skinhelpdeskConfig['shdurl'] ?? "skinhelpdesk.p.rapidapi.com";
   // String _service = skinhelpdeskConfig['service'] ?? "";
-
+  String _service = skinhelpdeskConfig['service'] ?? "/shdtone";
 
   // Base API request to get response
   Future<Map<String, dynamic>> post({
-    required String endpoint,
     required String query,
   }) async {
 
@@ -21,13 +20,16 @@ class APIService {
     Map<String, String> _headers = {
       "content-type": "application/json",
       "x-rapidapi-host": "skinhelpdesk.p.rapidapi.com",
-      "x-rapidapi-key": this._api_key,
+      "x-rapidapi-key": this._apiKey,
     };
-    Uri uri = Uri.https("https://" + _baseUrl, endpoint);
+    Uri uri = Uri.https(_baseUrl, _service);
+
+
 
     final response = await http.post(uri,
         headers: _headers,
-        body: jsonEncode(query));
+        body: query
+    );
 
     if (response.statusCode == 200) {
       // If server returns an OK response, parse the JSON.

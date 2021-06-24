@@ -12,16 +12,12 @@ import 'package:skinhelpdesk_app/ui/widgets/display_api_data.dart';
 
 // A screen that allows users to take a picture using a given camera.
 class TakePictureScreen extends StatefulWidget {
-
   @override
   TakePictureScreenState createState() => TakePictureScreenState();
 }
 
 class TakePictureScreenState extends State<TakePictureScreen> {
   late CameraController _controller;
-  Future<void>? _initializeControllerFuture;
-  bool? _initialized;
-
   late Future<Message> message;
   Submission submission =
       new Submission(Payload: '', Service: '', ValueCode: 35);
@@ -31,21 +27,13 @@ class TakePictureScreenState extends State<TakePictureScreen> {
   @override
   void initState() {
     super.initState();
-    // Next, initialize the controller. This returns a Future.
-    // To display the current output from the Camera,
-    // create a CameraController.
-
-    this.cameraInitializeAndPreview().then((value) {
-      _initialized = true;
-    });
-
-    //submission.Service = 'charm-go-test';
+    //this.cameraInitializeAndPreview();
     submission.ValueCode = 1;
   }
 
   Future<Message> createPost() async {
     APIService apiService = APIService();
-    final response =  await apiService.post(endpoint:'/shdtone', query: jsonEncode(submission));
+    final response = await apiService.post(query: jsonEncode(submission));
     return Message.fromJson(response);
   }
 
@@ -74,8 +62,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
       ResolutionPreset.medium,
       enableAudio: false,
     );
-    this._initializeControllerFuture = this._controller.initialize();
-    return this._initializeControllerFuture;
+    return this._controller.initialize();
   }
 
   /// Returns a suitable camera icon for [direction].
@@ -107,13 +94,6 @@ class TakePictureScreenState extends State<TakePictureScreen> {
         //showInSnackBar('Camera error ${this._controller.value.errorDescription}');
       }
     });
-
-    try {
-      // await this._controller.initialize();
-      this._initializeControllerFuture = this._controller.initialize();
-    } on CameraException catch (e) {
-      //_showCameraException(e);
-    }
 
     if (mounted) {
       setState(() {});
@@ -173,42 +153,25 @@ class TakePictureScreenState extends State<TakePictureScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Take a picture')),
-      // Wait until the controller is initialized before displaying the
-      // camera preview. Use a FutureBuilder to display a loading spinner
-      // until the controller has finished initializing.
       body: FutureBuilder<void>(
-        future: _initializeControllerFuture,
+        future: this.cameraInitializeAndPreview(),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done &&
-              _initialized!) {
-            // If the Future is complete, display the preview.
-            //return CameraPreview(_controller);
+          if (snapshot.connectionState == ConnectionState.done) {
             return _cameraTogglesRowWidget();
           } else {
-            // Otherwise, display a loading indicator.
             return Center(child: CircularProgressIndicator());
           }
         },
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.camera_alt),
-        // Provide an onPressed callback.
         onPressed: () async {
-          // Take the Picture in a try / catch block. If anything goes wrong,
-          // catch the error.
           try {
-            // Ensure that the camera is initialized.
-            await _initializeControllerFuture;
-
-
-            // Attempt to take a picture and get the file `image`
-            // where it was saved.
             final image = await _controller.takePicture();
 
             File cropped = await _cropImage(File(image.path));
 
             // Read file as string and set payload
-            //submission.Payload = await File(path).readAsString();
             // https://stackoverflow.com/questions/50036393/how-to-convert-an-image-to-base64-image-in-flutter
             List<int> imageBytes = await cropped.readAsBytes();
             String base64Image = base64Encode(imageBytes);
@@ -219,12 +182,11 @@ class TakePictureScreenState extends State<TakePictureScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    DisplayPictureScreen(imagePath: image.path, message: message),
+                builder: (context) => DisplayPictureScreen(
+                    imagePath: image.path, message: message),
               ),
             );
           } catch (e) {
-            // If an error occurs, log the error to the console.
             print(e);
           }
         },
@@ -237,7 +199,8 @@ class TakePictureScreenState extends State<TakePictureScreen> {
 class DisplayPictureScreen extends StatelessWidget {
   final String imagePath;
   final Future<Message> message;
-  const DisplayPictureScreen({Key? key, required this.imagePath, required this.message})
+  const DisplayPictureScreen(
+      {Key? key, required this.imagePath, required this.message})
       : super(key: key);
 
   @override
