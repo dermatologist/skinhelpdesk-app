@@ -33,8 +33,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
 
   Future<Message> createPost() async {
     APIService apiService = APIService();
-    final response = await apiService.post(
-        endpoint: '/shdtone', query: jsonEncode(submission));
+    final response = await apiService.post(query: jsonEncode(submission));
     return Message.fromJson(response);
   }
 
