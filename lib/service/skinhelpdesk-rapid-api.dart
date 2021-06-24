@@ -25,9 +25,12 @@ class APIService {
     };
     Uri uri = Uri.https(_baseUrl, endpoint);
 
+
+
     final response = await http.post(uri,
         headers: _headers,
-        body: jsonEncode(query));
+        body: query
+    );
 
     if (response.statusCode == 200) {
       // If server returns an OK response, parse the JSON.

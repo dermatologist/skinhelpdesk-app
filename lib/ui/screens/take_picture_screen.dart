@@ -27,13 +27,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
   @override
   void initState() {
     super.initState();
-    // Next, initialize the controller. This returns a Future.
-    // To display the current output from the Camera,
-    // create a CameraController.
-
-    this.cameraInitializeAndPreview();
-
-    //submission.Service = 'charm-go-test';
+    //this.cameraInitializeAndPreview();
     submission.ValueCode = 1;
   }
 
@@ -179,7 +173,6 @@ class TakePictureScreenState extends State<TakePictureScreen> {
             File cropped = await _cropImage(File(image.path));
 
             // Read file as string and set payload
-            //submission.Payload = await File(path).readAsString();
             // https://stackoverflow.com/questions/50036393/how-to-convert-an-image-to-base64-image-in-flutter
             List<int> imageBytes = await cropped.readAsBytes();
             String base64Image = base64Encode(imageBytes);
