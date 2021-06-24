@@ -1,6 +1,8 @@
 # skinhelpdesk_app
 
-A new Flutter project.
+[SkinHelpDesk](https://skinhelpdesk.com) offers a variety of API endpoints for cosmetic dermatology applications. These include APIs for skin tone (pigmentation), acne grading, skin type etc. [These APIs](https://rapidapi.com/eapenbp/api/skinhelpdesk) can be integrated into websites and mobile Apps of cosmetic dermatology service providers.
+
+All services are provided through [RapidAPI](https://rapidapi.com/eapenbp/api/skinhelpdesk) and images have to be submitted as base64 string. SHD-APP is a prototype flutter app to demonstrate the integration of SkinHelpDesk APIs. Feel free to use any part that you may find useful!
 
 ## Getting Started
 
