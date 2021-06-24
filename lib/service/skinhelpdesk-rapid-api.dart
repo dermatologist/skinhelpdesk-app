@@ -23,7 +23,7 @@ class APIService {
       "x-rapidapi-host": "skinhelpdesk.p.rapidapi.com",
       "x-rapidapi-key": this._api_key,
     };
-    Uri uri = Uri.https("https://" + _baseUrl, endpoint);
+    Uri uri = Uri.https(_baseUrl, endpoint);
 
     final response = await http.post(uri,
         headers: _headers,
