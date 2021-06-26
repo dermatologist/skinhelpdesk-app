@@ -27,7 +27,6 @@ class TakePictureScreenState extends State<TakePictureScreen> {
   @override
   void initState() {
     super.initState();
-    //this.cameraInitializeAndPreview();
     submission.ValueCode = 1;
   }
 
@@ -206,10 +205,7 @@ class DisplayPictureScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //appBar: AppBar(title: Text('Display the Picture')),
-      // The image is stored as a file on the device. Use the `Image.file`
-      // constructor with the given path to display the image.
-
+ 
       body: DisplayApiData(
         imagePath: imagePath,
         message: message,
