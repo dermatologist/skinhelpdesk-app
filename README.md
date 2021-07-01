@@ -2,7 +2,7 @@
 
 [![ckblib](https://github.com/dermatologist/skinhelpdesk-app/blob/develop/notes/skinhelpdesk-app.png)](https://skinhelpdesk.com)
 
-[SkinHelpDesk](https://skinhelpdesk.com) offers a variety of API endpoints for cosmetic dermatology applications. These include APIs for skin tone (pigmentation), acne grading, skin type etc. [These APIs](https://rapidapi.com/eapenbp/api/skinhelpdesk) can be integrated into websites and mobile Apps of cosmetic dermatology service providers.
+[SkinHelpDesk](https://skinhelpdesk.com) offers a variety of API endpoints for cosmetic dermatology applications. These include APIs for skin tone (pigmentation), acne grading, skin type etc. [These APIs](https://rapidapi.com/eapenbp/api/skinhelpdesk) can be integrated into websites and mobile Apps of cosmetic dermatology service providers. [Please read terms of use of SkinHelpDesk APIs.](https://skinhelpdesk.com/terms/)
 
 All services are provided through [RapidAPI](https://rapidapi.com/eapenbp/api/skinhelpdesk) and images have to be submitted as base64 string. This is a prototype flutter app to demonstrate the integration of SkinHelpDesk APIs (Not for production use). Feel free to use any part of this prototype you may find useful in your project!
 
