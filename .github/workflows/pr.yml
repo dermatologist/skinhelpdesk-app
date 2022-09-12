@@ -22,7 +22,7 @@ jobs:
       with:
         distribution: 'adopt'
         java-version: 13
-    - uses: subosito/flutter-action@v2.3.0
+    - uses: subosito/flutter-action@v2.7.0
       with:
         flutter-version: '2.0.5'
     - run: flutter pub get
